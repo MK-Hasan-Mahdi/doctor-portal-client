@@ -6,7 +6,8 @@
 
 - React Router
 - React Firebase Hooks
-- React Bootstrap
+- Tailwind CSS
+- DaisyUI
 - Firebase
 - Mongodb
 - React Hook Form
