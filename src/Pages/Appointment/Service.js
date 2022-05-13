@@ -1,5 +1,4 @@
 import React from 'react';
-import BookingModal from './BookingModal';
 
 const Service = ({ service, setTreatment }) => {
     const { name, slots } = service;
