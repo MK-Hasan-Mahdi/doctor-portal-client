@@ -5,7 +5,7 @@ const Navbar = () => {
     const menuItems = <>
         <li className='text-2xl'><Link to='/'>Home</Link></li>
         <li className='text-2xl'><Link to='/about'>About</Link></li>
-        <li className='text-2xl'><Link to='/appoinment'>Appoinment</Link></li>
+        <li className='text-2xl'><Link to='/appointment'>Appoinment</Link></li>
         <li className='text-2xl'><Link to='/reviews'>Reviews</Link></li>
         <li className='text-2xl'><Link to='/contact'>Contact</Link></li>
         <li className='text-2xl'><Link to='/login'>Login</Link></li>
