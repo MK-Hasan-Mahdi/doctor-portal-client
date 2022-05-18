@@ -2,22 +2,50 @@ import { format } from 'date-fns';
 import React, { useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import auth from '../../firebase.init';
+import { toast } from 'react-toastify';
 
-const BookingModal = ({ treatment, setTreatment, date }) => {
+const BookingModal = ({ treatment, setTreatment, date, refetch }) => {
     // console.log(treatment);
     const [user, loading, error] = useAuthState(auth);
     const { _id, name, slots } = treatment;
+    const formatedDate = format(date, 'PP');
 
     const handleBooking = (event) => {
         event.preventDefault();
         const slot = event.target.timeSlot.value;
-        const name = event.target.name.value;
-        const email = event.target.email.value;
-        const phone = event.target.phone.value;
-        console.log(date, slot, name, email, phone);
-
-        // to close modal
-        setTreatment(null);
+        // const name = event.target.name.value;
+        // const email = event.target.email.value;
+        // const phone = event.target.phone.value;
+        // console.log(date, slot, name, email, phone);
+        const booking = {
+            treatmentId: _id,
+            date: formatedDate,
+            treatment: name,
+            patient: user.email,
+            patientName: user.displayName,
+            slot: slot,
+            phone: event.target.phone.value
+        }
+        fetch('http://localhost:5000/booking', {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(booking)
+        })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+                if (data.success) {
+                    toast(`Appointment is set, ${formatedDate} at ${slot}`)
+                }
+                else {
+                    toast.error(`Already have an appointment on ${data.booking?.date} at ${data.booking?.slot}`)
+                }
+                refetch();
+                // to close modal
+                setTreatment(null);
+            });
     }
 
     return (
