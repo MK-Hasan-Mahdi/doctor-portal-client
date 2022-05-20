@@ -14,9 +14,32 @@ const AddDoctor = () => {
         return <Loading></Loading>
     }
 
+    const imageStorageKey = '6fe1ea4ad57cca8e6c743cc6605df210'; //from imgbb
+
     const onSubmit = async data => {
         // console.log(data)
         console.log('update done', data);
+        const image = data.image[0]; //image is array, get from submit image upload file
+        const formData = new FormData();
+        formData.append('image', image);
+        const url = `https://api.imgbb.com/1/upload?key=${imageStorageKey}`; //from imgbb
+        fetch(url, {
+            method: 'POST',
+            body: formData
+        })
+            .then(res => res.json())
+            .then(result => {
+                if (result.success) {
+                    const img = result.data.url;
+                    const doctor = {
+                        name: data.name,
+                        email: data.email,
+                        speciality: data.speciality,
+                        img: img
+                    }
+                }
+                console.log('imgbb', result);
+            })
 
     };
     return (
@@ -77,9 +100,25 @@ const AddDoctor = () => {
 
 
                     </select>
-
-
                 </div>
+
+                <div className="form-control w-full max-w-xs">
+                    <label className="label">
+                        <span className="label-text">Image</span>
+                    </label>
+                    <input type="file" placeholder="Image Upload" className="input input-bordered w-full max-w-xs"
+                        {...register("image", {
+                            required: {
+                                value: true,
+                                message: "Imageee is Required"
+                            },
+                        })}
+                    />
+                    <label className="label">
+                        {errors.name?.type === 'required' && <span className="label-text-alt text-red-500">{errors.name.message}</span>}
+                    </label>
+                </div>
+
                 <input className='btn w-full max-w-xs mt-4' type="submit" value="Add Doctor" />
             </form>
         </div>
