@@ -1,6 +1,7 @@
 import React from 'react';
 import { useForm } from "react-hook-form";
 import { useQuery } from 'react-query';
+import { toast } from 'react-toastify';
 import Loading from '../Shared/Loading';
 
 const AddDoctor = () => {
@@ -37,7 +38,28 @@ const AddDoctor = () => {
                         speciality: data.speciality,
                         img: img
                     }
+                    //send to database
+                    fetch('http://localhost:5000/doctor', {
+                        method: 'POST',
+                        headers: {
+                            'content-type': 'application/json',
+                            authorization: `Bearer ${localStorage.getItem('accessToken')}`
+                        },
+                        body: JSON.stringify(doctor)
+                    })
+                        .then(res => res.json())
+                        .then(output => {
+                            if (output.insertedId) {
+                                toast.success('Doctor added successfully')
+                            }
+                            else {
+                                toast.error('Failed to add doctor')
+                            }
+                            console.log('doctor', output);
+                        })
                 }
+
+
                 console.log('imgbb', result);
             })
 
